@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEBBAZAAR — Grow Your Business Online</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- EmailJS SDK: sends the order form straight to your inbox, no mail app needed -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+:root{
+  --ink:#0A0E1A;
+  --ink-2:#0F1B3D;
+  --blue:#2E5EFF;
+  --cyan:#4FD1FF;
+  --white:#FFFFFF;
+  --mist:#F4F6FB;
+  --mist-2:#EAEFFB;
+  --slate:#5B6B8C;
+  --slate-dark:#9AA8C7;
+  --line:rgba(255,255,255,0.10);
+  --line-dark:rgba(15,27,61,0.08);
+  --radius:18px;
+  --shadow-lg: 0 30px 60px -20px rgba(10,14,26,0.35);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--white);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.02em;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+.mono{font-family:'JetBrains Mono',monospace;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.container{width:100%;max-width:1240px;margin:0 auto;padding:0 28px;}
+section{position:relative;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--blue);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:16px;
+  font-weight:600;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--blue);}
+.section-head{max-width:640px;margin-bottom:56px;}
+.section-head h2{font-size:clamp(28px,4vw,42px);color:var(--ink);margin-bottom:14px;}
+.section-head p{color:var(--slate);font-size:16px;}
+.on-dark .section-head h2{color:var(--white);}
+.on-dark .section-head p{color:var(--slate-dark);}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;border-radius:100px;font-weight:600;font-size:14.5px;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  color:var(--white);
+  box-shadow:0 10px 30px -8px rgba(46,94,255,0.55);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(46,94,255,0.65);}
+.btn-ghost{
+  background:rgba(255,255,255,0.06);
+  color:var(--white);
+  border:1px solid rgba(255,255,255,0.22);
+  backdrop-filter:blur(6px);
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.14);transform:translateY(-2px);}
+.btn-dark{background:var(--ink);color:var(--white);}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(10,14,26,0.5);}
+.btn-block{width:100%;}
+
+/* ===== HEADER ===== */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:20px 0;
+  transition:all .35s ease;
+}
+header.scrolled{
+  padding:12px 0;
+  background:rgba(10,14,26,0.75);
+  backdrop-filter:blur(16px) saturate(160%);
+  border-bottom:1px solid var(--line);
+}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:var(--white);}
+.logo-mark{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--white);font-weight:700;
+  box-shadow:0 8px 18px -6px rgba(46,94,255,0.7);
+}
+nav ul{display:flex;gap:30px;align-items:center;}
+nav a.navlink{
+  color:rgba(255,255,255,0.8);font-size:14px;font-weight:500;position:relative;padding:4px 0;
+}
+nav a.navlink::after{
+  content:"";position:absolute;left:0;bottom:-4px;width:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .25s ease;
+}
+nav a.navlink:hover::after{width:100%;}
+nav a.navlink:hover{color:var(--white);}
+.header-actions{display:flex;align-items:center;gap:14px;}
+.burger{display:none;flex-direction:column;gap:5px;width:26px;}
+.burger span{height:2px;background:var(--white);border-radius:2px;}
+
+.mobile-nav{
+  position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+  background:var(--ink-2);z-index:1100;padding:100px 32px 40px;
+  transition:right .4s cubic-bezier(.7,0,.3,1);
+  box-shadow:-20px 0 60px rgba(0,0,0,.4);
+}
+.mobile-nav.open{right:0;}
+.mobile-nav ul{display:flex;flex-direction:column;gap:22px;}
+.mobile-nav a{color:var(--white);font-size:17px;font-weight:500;}
+.mobile-close{position:absolute;top:28px;right:28px;font-size:24px;color:var(--white);}
+.nav-scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1050;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+.nav-scrim.show{opacity:1;pointer-events:auto;}
+
+/* ===== HERO ===== */
+.hero{
+  background:radial-gradient(ellipse 120% 80% at 50% -10%, #16224a 0%, var(--ink) 55%);
+  color:var(--white);
+  padding:180px 0 120px;
+  overflow:hidden;
+  position:relative;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
+  pointer-events:none;
+}
+.hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;position:relative;z-index:2;}
+.hero-copy h1{font-size:clamp(36px,5vw,58px);line-height:1.08;margin-bottom:22px;}
+.hero-copy h1 .grad{background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-copy p{font-size:17px;color:var(--slate-dark);max-width:520px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px;}
+.hero-stats{display:grid;grid-template-columns:repeat(4,auto);gap:34px;}
+.hero-stats .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:24px;color:var(--white);}
+.hero-stats .stat span{font-size:12.5px;color:var(--slate-dark);}
+
+/* signature: growth constellation */
+.constellation{position:relative;width:100%;aspect-ratio:1/0.95;}
+.constellation svg{width:100%;height:100%;overflow:visible;}
+.const-line{fill:none;stroke:rgba(255,255,255,0.12);stroke-width:1;}
+.const-path{fill:none;stroke:url(#growthGrad);stroke-width:2.5;stroke-linecap:round;
+  stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.6s ease forwards .4s;}
+@keyframes draw{to{stroke-dashoffset:0;}}
+.const-node{fill:var(--cyan);opacity:0;animation:pop .5s ease forwards;}
+@keyframes pop{from{opacity:0;transform:scale(0);}to{opacity:1;transform:scale(1);}}
+.const-node.pulse{animation:pop .5s ease forwards, pulse 2.4s ease-in-out infinite 1.2s;}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 0px var(--cyan));}50%{filter:drop-shadow(0 0 8px var(--cyan));}}
+.const-tag{
+  position:absolute;padding:8px 14px;border-radius:100px;font-size:12px;font-weight:600;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);backdrop-filter:blur(8px);
+  color:var(--white);opacity:0;animation:tagIn .6s ease forwards;
+}
+@keyframes tagIn{to{opacity:1;}}
+
+/* ===== ABOUT COMPANY ===== */
+.about-company{padding:70px 0;background:var(--ink);border-top:1px solid var(--line);}
+.ac-text{max-width:760px;margin:0 auto;text-align:center;}
+.ac-text .eyebrow{justify-content:center;}
+.ac-text .eyebrow::before{display:none;}
+.ac-text h2{font-size:clamp(28px,4vw,40px);margin-bottom:18px;color:var(--white);}
+.ac-text p{color:var(--slate-dark);margin-bottom:22px;font-size:16px;}
+.ac-stat-row{display:flex;justify-content:center;gap:44px;margin:34px 0;flex-wrap:wrap;}
+.ac-stat-row div{text-align:center;}
+.ac-stat-row b{display:block;font-family:'Space Grotesk';font-size:30px;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.ac-stat-row span{font-size:12.5px;color:var(--slate-dark);letter-spacing:.03em;text-transform:uppercase;}
+.ac-list{display:inline-grid;grid-template-columns:1fr 1fr;gap:14px 32px;margin:0 0 34px;text-align:left;}
+.ac-list li{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;color:var(--white);}
+.ac-list li i{color:var(--cyan);font-size:15px;}
+
+/* ===== SERVICES ===== */
+.services{padding:120px 0;background:var(--mist);}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+.svc-card{
+  background:var(--white);border-radius:18px;padding:30px 26px;
+  border:1px solid var(--line-dark);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.svc-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent;}
+.svc-icon{
+  width:48px;height:48px;border-radius:13px;
+  background:linear-gradient(135deg,rgba(46,94,255,0.12),rgba(79,209,255,0.12));
+  display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  color:var(--blue);font-size:19px;
+}
+.svc-card h4{font-size:16px;margin-bottom:8px;}
+.svc-card p{font-size:13.5px;color:var(--slate);}
+.apps-notice{
+  margin-top:34px;padding:26px 30px;border-radius:16px;
+  background:linear-gradient(135deg,#EAF0FF,#F4F6FB);
+  border:1px dashed rgba(46,94,255,0.35);
+  display:flex;align-items:center;gap:18px;
+}
+.apps-notice i{font-size:26px;color:var(--blue);}
+.apps-notice p{font-size:14.5px;color:var(--slate);}
+.apps-notice strong{color:var(--ink);}
+
+/* ===== PACKAGES (4 separate priced services) ===== */
+.pkg-section{padding:110px 0;}
+.pkg-section.on-dark{background:var(--ink);color:var(--white);}
+.pkg-jump{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:60px;}
+.pkg-jump a{
+  font-size:13px;font-weight:600;padding:9px 18px;border-radius:100px;
+  border:1px solid var(--line-dark);color:var(--slate);transition:all .25s ease;
+}
+.pkg-jump a:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.sec-head{max-width:680px;margin:0 auto 56px;text-align:center;}
+.sec-head .eyebrow{justify-content:center;}
+.sec-head .eyebrow::before{display:none;}
+.sec-head h2{font-size:clamp(26px,4vw,38px);margin-bottom:12px;}
+.sec-head p{color:var(--slate);font-size:15.5px;}
+.on-dark .sec-head p{color:var(--slate-dark);}
+
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
+.gd-tier-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));}
+.tier-card{
+  display:flex;flex-direction:column;height:100%;
+  border-radius:22px;padding:34px 28px;position:relative;
+  background:rgba(255,255,255,0.04);border:1px solid var(--line);backdrop-filter:blur(10px);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.tier-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);}
+.tier-card.featured{border:1px solid rgba(79,209,255,0.45);background:linear-gradient(160deg,rgba(46,94,255,0.14),rgba(79,209,255,0.05));}
+.tier-badge{position:absolute;top:20px;right:20px;font-size:10.5px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;padding:5px 12px;border-radius:100px;letter-spacing:.04em;}
+.tier-name{font-family:'JetBrains Mono';font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;}
+.tier-price{font-family:'Space Grotesk';font-size:34px;margin-bottom:4px;color:var(--white);}
+.tier-price span{font-size:13px;color:var(--slate-dark);font-family:'Inter';font-weight:400;}
+.tier-sub{font-size:13px;color:var(--slate-dark);margin-bottom:22px;}
+.tier-feats{flex:1;margin-bottom:26px;}
+.tier-feats li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;padding:7px 0;color:#e8ecf7;}
+.tier-feats li i{color:var(--cyan);font-size:12px;margin-top:4px;}
+.btn-select{
+  margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 20px;border-radius:100px;font-weight:600;font-size:14px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;
+  box-shadow:0 10px 26px -8px rgba(46,94,255,0.5);transition:transform .25s ease,box-shadow .25s ease;
+}
+.btn-select:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(46,94,255,0.6);}
+
+/* ===== ORDER MODAL ===== */
+.modal-scrim{position:fixed;inset:0;background:rgba(6,9,18,0.6);backdrop-filter:blur(4px);z-index:2000;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+.modal-scrim.show{opacity:1;pointer-events:auto;}
+.modal{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);width:92%;max-width:560px;max-height:88vh;overflow-y:auto;
+  background:#fff;border-radius:22px;z-index:2001;padding:0;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;
+  box-shadow:0 40px 90px -20px rgba(0,0,0,0.5);
+}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%);}
+.modal-head{
+  background:linear-gradient(135deg,var(--ink),var(--ink-2));color:#fff;padding:26px 28px;
+  border-radius:22px 22px 0 0;position:relative;
+}
+.modal-head .close-modal{position:absolute;top:20px;right:22px;font-size:18px;color:rgba(255,255,255,0.7);cursor:pointer;}
+.modal-steps{display:flex;gap:6px;margin-bottom:14px;}
+.modal-steps span{height:3px;flex:1;border-radius:10px;background:rgba(255,255,255,0.18);}
+.modal-steps span.active{background:linear-gradient(90deg,var(--blue),var(--cyan));}
+.modal-head h3{font-size:18px;margin-bottom:4px;}
+.modal-head .sel-line{font-size:13px;color:var(--slate-dark);}
+.modal-head .sel-line b{color:var(--cyan);font-family:'JetBrains Mono';}
+.modal-body{padding:28px;}
+.mstep{display:none;}
+.mstep.active{display:block;}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-field2{display:flex;flex-direction:column;gap:6px;}
+.form-field2 label{font-size:12px;color:var(--slate);font-weight:600;}
+.form-field2 input,.form-field2 textarea,.form-field2 select{
+  border:1px solid var(--line-dark);border-radius:10px;padding:11px 13px;font-family:'Inter';font-size:13.5px;
+  background:#fff;color:var(--ink);width:100%;
+}
+.form-field2 select{appearance:auto;}
+.form-field2 input:focus,.form-field2 textarea:focus,.form-field2 select:focus{outline:2px solid var(--blue);outline-offset:1px;}
+.form-field2 input[readonly]{background:var(--mist);color:var(--ink);font-weight:600;}
+.form-field2 label .req{color:#ff4d4d;}
+.modal-actions{display:flex;gap:12px;margin-top:20px;}
+.mbtn{flex:1;padding:13px;border-radius:12px;font-weight:600;font-size:13.5px;text-align:center;}
+.mbtn-primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;}
+.mbtn-ghost{background:var(--mist);color:var(--ink);}
+.summary-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line-dark);font-size:13.5px;}
+.summary-row span:first-child{color:var(--slate);}
+.summary-row span:last-child{font-weight:600;text-align:right;}
+.summary-total{display:flex;justify-content:space-between;padding:18px 0 6px;font-family:'Space Grotesk';font-size:20px;}
+.success-wrap{text-align:center;padding:20px 0 10px;}
+.success-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;margin:0 auto 20px;}
+.success-wrap h3{font-size:20px;margin-bottom:10px;}
+.success-wrap p{color:var(--slate);font-size:14px;max-width:380px;margin:0 auto 22px;}
+
+/* ===== DEMO WEBSITES (marquee) ===== */
+.demos{padding:120px 0 100px;background:var(--white);}
+.marquee-wrap{overflow:hidden;position:relative;margin-top:10px;}
+.marquee-wrap::before,.marquee-wrap::after{
+  content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.marquee-wrap::before{left:0;background:linear-gradient(90deg,var(--white),transparent);}
+.marquee-wrap::after{right:0;background:linear-gradient(-90deg,var(--white),transparent);}
+.marquee-track{display:flex;gap:20px;width:max-content;animation:scroll-left 42s linear infinite;}
+.marquee-track:hover{animation-play-state:paused;}
+@keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.demo-card{
+  width:230px;border-radius:16px;overflow:hidden;flex-shrink:0;
+  border:1px solid var(--line-dark);background:var(--mist);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.demo-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.demo-thumb{
+  height:130px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;
+}
+.demo-card h5{padding:14px 16px 4px;font-size:14.5px;}
+.demo-card a{display:flex;align-items:center;gap:6px;padding:4px 16px 16px;font-size:12.5px;font-weight:600;color:var(--blue);}
+
+/* ===== ABOUT US (story) ===== */
+.about-us{padding:120px 0;background:var(--mist);}
+.au-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.au-text p{color:var(--slate);margin-bottom:16px;font-size:16px;}
+.au-quote{
+  border-left:3px solid var(--blue);padding-left:20px;margin:26px 0;font-size:17px;
+  font-family:'Space Grotesk';color:var(--ink);
+}
+.au-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.au-mini-card{
+  background:var(--white);border-radius:16px;padding:22px;border:1px solid var(--line-dark);
+}
+.au-mini-card b{display:block;font-family:'Space Grotesk';font-size:26px;color:var(--blue);margin-bottom:4px;}
+.au-mini-card span{font-size:12.5px;color:var(--slate);}
+
+/* ===== TEAM ===== */
+.team{padding:120px 0;background:var(--white);}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+.team-card{text-align:center;padding:30px 18px;border-radius:18px;border:1px solid var(--line-dark);transition:transform .3s ease,box-shadow .3s ease;}
+.team-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.avatar{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff;
+}
+.team-card h4{font-size:15px;margin-bottom:4px;}
+.team-card span{font-size:12.5px;color:var(--slate);}
+
+/* ===== GOAL ===== */
+.goal{padding:120px 0;background:var(--ink-2);color:var(--white);position:relative;overflow:hidden;}
+.goal::before{
+  content:"";position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,209,255,0.14),transparent 70%);
+  top:-200px;right:-200px;
+}
+.goal-inner{max-width:760px;margin:0 auto;text-align:center;position:relative;z-index:2;}
+.goal-inner .eyebrow{justify-content:center;}
+.goal-inner .eyebrow::before{display:none;}
+.goal-inner h2{font-size:clamp(28px,4.5vw,44px);margin-bottom:22px;}
+.goal-inner p{font-size:18px;color:var(--slate-dark);line-height:1.7;}
+.goal-inner p.lead{font-family:'Space Grotesk';font-size:22px;color:var(--white);margin-top:26px;}
+
+/* ===== FAQ ===== */
+.faq{padding:120px 0;background:var(--white);}
+.faq-list{max-width:780px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--line-dark);}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:24px 4px;cursor:pointer;font-family:'Space Grotesk';font-size:16.5px;
+}
+.faq-q i{transition:transform .3s ease;color:var(--blue);}
+.faq-item.open .faq-q i{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.faq-a p{padding:0 4px 24px;color:var(--slate);font-size:15px;max-width:640px;}
+
+/* ===== REVIEWS ===== */
+.reviews{padding:120px 0;background:var(--mist);}
+.rev-scroll{display:flex;gap:20px;overflow-x:auto;padding-bottom:16px;scroll-snap-type:x mandatory;}
+.rev-scroll::-webkit-scrollbar{height:6px;}
+.rev-scroll::-webkit-scrollbar-thumb{background:#ccd4e6;border-radius:10px;}
+.rev-card{
+  min-width:300px;max-width:300px;background:var(--white);border-radius:18px;padding:26px;
+  border:1px solid var(--line-dark);scroll-snap-align:start;
+}
+.rev-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.rev-top .avatar{width:44px;height:44px;font-size:14px;margin:0;}
+.rev-name{font-size:14.5px;font-weight:600;}
+.rev-country{font-size:12px;color:var(--slate);}
+.rev-stars{color:#F5B301;font-size:12.5px;margin-bottom:10px;}
+.rev-card p{font-size:14px;color:var(--slate);}
+
+/* ===== CONTACT ===== */
+.contact{padding:120px 0;background:var(--ink);color:var(--white);}
+.contact-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:50px;}
+.c-info-item{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line);}
+.c-info-item i{
+  width:42px;height:42px;border-radius:12px;background:rgba(79,209,255,0.12);color:var(--cyan);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.c-info-item h5{font-size:14.5px;margin-bottom:4px;}
+.c-info-item span{font-size:13.5px;color:var(--slate-dark);}
+.map-embed{border-radius:16px;overflow:hidden;margin-top:24px;border:1px solid var(--line);filter:grayscale(0.3) invert(0.92) contrast(0.9);}
+.map-embed iframe{width:100%;height:200px;border:0;display:block;}
+.contact-form{background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:20px;padding:36px;backdrop-filter:blur(8px);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-field{display:flex;flex-direction:column;gap:8px;}
+.form-field.full{grid-column:1/-1;}
+.form-field label{font-size:12.5px;color:var(--slate-dark);font-weight:600;letter-spacing:.03em;}
+.form-field input,.form-field textarea{
+  background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:10px;
+  padding:12px 14px;color:var(--white);font-family:'Inter';font-size:14px;resize:vertical;
+}
+.form-field input:focus,.form-field textarea:focus{outline:2px solid var(--blue);outline-offset:1px;}
+.form-note{font-size:12px;color:var(--slate-dark);margin-top:14px;}
+
+/* ===== FOOTER ===== */
+footer{background:#070A12;color:var(--slate-dark);padding:80px 0 30px;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px;margin-bottom:60px;}
+.footer-brand p{font-size:13.5px;margin:16px 0 22px;max-width:280px;}
+.footer-brand .logo{color:var(--white);}
+.social-row{display:flex;gap:10px;}
+.social-row a{
+  width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:center;color:var(--white);
+  border:1px solid var(--line);transition:background .25s ease, transform .25s ease;
+}
+.social-row a:hover{background:var(--blue);transform:translateY(-3px);}
+.footer-col h5{color:var(--white);font-size:13.5px;margin-bottom:18px;letter-spacing:.04em;text-transform:uppercase;font-family:'JetBrains Mono';}
+.footer-col ul li{margin-bottom:11px;}
+.footer-col a{font-size:14px;transition:color .2s ease;}
+.footer-col a:hover{color:var(--white);}
+.newsletter{display:flex;gap:8px;margin-top:14px;}
+.newsletter input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--white);font-size:13px;}
+.newsletter button{background:var(--blue);color:#fff;padding:0 18px;border-radius:10px;font-size:13px;font-weight:600;}
+.footer-bottom{
+  border-top:1px solid var(--line);padding-top:26px;display:flex;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;font-size:12.5px;
+}
+.footer-bottom .legal{display:flex;gap:22px;}
+
+/* ===== FLOATING ===== */
+.float-wa{
+  position:fixed;bottom:26px;left:26px;z-index:900;width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;
+  box-shadow:0 12px 26px -6px rgba(37,211,102,0.6);transition:transform .25s ease;
+}
+.float-wa:hover{transform:scale(1.08);}
+.to-top{
+  position:fixed;bottom:26px;right:26px;z-index:900;width:48px;height:48px;border-radius:50%;
+  background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);opacity:0;pointer-events:none;transition:opacity .3s ease, transform .25s ease;
+}
+.to-top.show{opacity:1;pointer-events:auto;}
+.to-top:hover{transform:translateY(-3px);}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:980px){
+  nav ul, .header-actions .btn{display:none;}
+  .burger{display:flex;}
+  .hero-grid,.au-grid,.contact-grid{grid-template-columns:1fr;}
+  .constellation{max-width:420px;margin:0 auto;}
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .tier-grid{grid-template-columns:1fr;}
+  .gd-tier-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+  .tier-card.featured{transform:none;}
+  .team-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:560px){
+  .svc-grid{grid-template-columns:1fr;}
+  .team-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .form-row,.form-row2{grid-template-columns:1fr;}
+  .hero-copy p{max-width:100%;}
+  .section-head,.sec-head{margin-bottom:36px;}
+  .about-company,.services,.pkg-section,.demos,.about-us,.team,.goal,.faq,.reviews,.contact{padding:56px 0;}
+  .hero{padding:150px 0 60px;}
+  .modal{width:94%;max-height:92vh;}
+  .modal-body{padding:22px 18px;}
+  .modal-head{padding:22px 20px;}
+  .contact-form{padding:26px 20px;}
+  .hero-btns{width:100%;}
+  .hero-btns .btn{flex:1;justify-content:center;}
+}
+@media(max-width:380px){
+  .hero-stats{grid-template-columns:repeat(2,1fr);gap:20px;}
+  .modal-actions{flex-direction:column;}
+}
+
+/* ===== UNIFIED DARK THEME (matches app screenshot) ===== */
+body{background:var(--ink);}
+.about-company,.services,.demos,.about-us,.team,.faq,.reviews{
+  background:var(--ink);color:var(--white);
+  padding:64px 0;
+  border-top:1px solid var(--line);
+}
+.services{border-top:none;}
+.section-head h2{color:var(--white);}
+.section-head p{color:var(--slate-dark);}
+
+.svc-card{background:rgba(255,255,255,0.04);border:1px solid var(--line);}
+.svc-card h4{color:var(--white);}
+.svc-card p{color:var(--slate-dark);}
+.apps-notice{background:rgba(255,255,255,0.04);border:1px dashed rgba(79,209,255,0.35);}
+.apps-notice p{color:var(--slate-dark);}
+.apps-notice strong{color:var(--white);}
+
+.demo-card{background:rgba(255,255,255,0.04);border:1px solid var(--line);}
+.demo-card h5{color:var(--white);}
+.marquee-wrap::before{background:linear-gradient(90deg,var(--ink),transparent);}
+.marquee-wrap::after{background:linear-gradient(-90deg,var(--ink),transparent);}
+
+.au-text p{color:var(--slate-dark);}
+.au-quote{color:var(--white);}
+.au-mini-card{background:rgba(255,255,255,0.04);border:1px solid var(--line);}
+.au-mini-card span{color:var(--slate-dark);}
+
+.team-card{border:1px solid var(--line);background:rgba(255,255,255,0.03);}
+.team-card h4{color:var(--white);}
+.team-card span{color:var(--slate-dark);}
+
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{color:var(--white);}
+.faq-a p{color:var(--slate-dark);}
+
+.rev-card{background:rgba(255,255,255,0.04);border:1px solid var(--line);}
+.rev-name{color:var(--white);}
+.rev-country{color:var(--slate-dark);}
+.rev-card p{color:var(--slate-dark);}
+
+/* join sections tightly, no alternating light/dark blocks */
+.about-company,.services,.pkg-section,.demos,.about-us,.team,.faq,.reviews{padding:64px 0;}
+.pkg-section{border-top:1px solid var(--line);}
+.section-head,.sec-head{margin-bottom:44px;}
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header id="siteHeader">
+  <div class="container nav-wrap">
+    <a href="#home" class="logo"><span class="logo-mark">W</span>WEBBAZAAR</a>
+    <nav>
+      <ul>
+        <li><a class="navlink" href="#home">Home</a></li>
+        <li><a class="navlink" href="#services">Services</a></li>
+        <li><a class="navlink" href="#packages">Packages</a></li>
+        <li><a class="navlink" href="#demos">Demos</a></li>
+        <li><a class="navlink" href="#about">About</a></li>
+        <li><a class="navlink" href="#team">Team</a></li>
+        <li><a class="navlink" href="#goal">Goal</a></li>
+        <li><a class="navlink" href="#faq">FAQ</a></li>
+        <li><a class="navlink" href="#reviews">Reviews</a></li>
+        <li><a class="navlink" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="#contact" class="btn btn-primary">Get Started</a>
+      <div class="burger" id="burgerBtn"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="nav-scrim" id="navScrim"></div>
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-close" id="mobileClose"><i class="fa-solid fa-xmark"></i></div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#demos">Demos</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#goal">Goal</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Digital Marketing Agency</div>
+      <h1>Grow Your Business <span class="grad">Online</span> With WEBBAZAAR</h1>
+      <p>Professional website development, graphic designing, SEO, branding, and digital marketing solutions built to turn visitors into customers.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-primary">View Services</a>
+        <a href="https://wa.me/923001234567?text=Hi%2C%20I%27d%20like%20a%20free%20consultation%20for%20my%20business." class="btn btn-ghost" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Get Free Consultation</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>8+</b><span>Years Experience</span></div>
+        <div class="stat"><b>500+</b><span>Happy Clients</span></div>
+        <div class="stat"><b>48h</b><span>Fast Delivery</span></div>
+        <div class="stat"><b>24/7</b><span>Support Team</span></div>
+      </div>
+    </div>
+    <div class="constellation">
+      <svg viewBox="0 0 420 400">
+        <defs>
+          <linearGradient id="growthGrad" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#2E5EFF"/>
+            <stop offset="100%" stop-color="#4FD1FF"/>
+          </linearGradient>
+        </defs>
+        <line class="const-line" x1="20" y1="360" x2="400" y2="360"/>
+        <line class="const-line" x1="20" y1="20" x2="20" y2="360"/>
+        <path class="const-path" d="M30,330 L90,300 L140,250 L120,190 L190,210 L230,140 L280,160 L340,70 L390,40"/>
+        <circle class="const-node pulse" cx="30" cy="330" r="5"/>
+        <circle class="const-node" cx="90" cy="300" r="4" style="animation-delay:.6s"/>
+        <circle class="const-node" cx="140" cy="250" r="4" style="animation-delay:.9s"/>
+        <circle class="const-node" cx="120" cy="190" r="4" style="animation-delay:1.2s"/>
+        <circle class="const-node" cx="190" cy="210" r="4" style="animation-delay:1.4s"/>
+        <circle class="const-node" cx="230" cy="140" r="4" style="animation-delay:1.6s"/>
+        <circle class="const-node" cx="280" cy="160" r="4" style="animation-delay:1.8s"/>
+        <circle class="const-node pulse" cx="340" cy="70" r="5" style="animation-delay:2s"/>
+        <circle class="const-node pulse" cx="390" cy="40" r="6" style="animation-delay:2.3s"/>
+      </svg>
+      <div class="const-tag" style="top:8%;right:2%;animation-delay:2.6s;">Traffic +240%</div>
+      <div class="const-tag" style="top:48%;left:0%;animation-delay:2.9s;">SEO Ranked #1</div>
+      <div class="const-tag" style="bottom:6%;left:4%;animation-delay:3.1s;">Live in 5 Days</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT COMPANY ================= -->
+<section class="about-company" id="about">
+  <div class="container">
+    <div class="ac-text reveal">
+      <div class="eyebrow">About Company</div>
+      <h2>A full-service digital partner for growing businesses</h2>
+      <p>For 8 years, WEBBAZAAR has helped businesses move online with modern websites, mobile-friendly design, and marketing systems that actually generate customers. From first-time business owners to established brands, we handle the technical work so you can focus on running your business.</p>
+      <p>Our team designs, builds, and promotes — websites, branding, SEO, and digital marketing under one roof, with every project measured against a single goal: your business growth.</p>
+      <div class="ac-stat-row">
+        <div><b>8+</b><span>Years Experience</span></div>
+        <div><b>500+</b><span>Websites Delivered</span></div>
+        <div><b>20+</b><span>Industries Served</span></div>
+      </div>
+      <ul class="ac-list">
+        <li><i class="fa-solid fa-check"></i>Modern Websites</li>
+        <li><i class="fa-solid fa-check"></i>Branding & Identity</li>
+        <li><i class="fa-solid fa-check"></i>SEO That Ranks</li>
+        <li><i class="fa-solid fa-check"></i>Graphic Design</li>
+        <li><i class="fa-solid fa-check"></i>Digital Marketing</li>
+        <li><i class="fa-solid fa-check"></i>Ongoing Support</li>
+      </ul>
+      <a href="#contact" class="btn btn-dark">Talk to Our Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Services</div>
+      <h2>Everything your business needs to grow online</h2>
+      <p>From your first website to full-scale marketing, every service is built to move one metric: your growth.</p>
+    </div>
+    <div class="svc-grid" id="svcGrid"></div>
+    <div class="apps-notice reveal">
+      <i class="fa-solid fa-mobile-screen"></i>
+      <p><strong>Mobile App Development</strong> is temporarily unavailable due to technical upgrades. We will resume App Development services very soon.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PACKAGES ================= -->
+<div id="packages">
+
+  <div class="pkg-section on-dark" style="padding-bottom:0;">
+    <div class="container">
+      <div class="pkg-jump reveal">
+        <a href="#website-packages">Website</a>
+        <a href="#graphic-design">Graphic Design</a>
+        <a href="#seo-services">SEO</a>
+        <a href="#portfolio-packages">Portfolio</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Website Packages -->
+  <section class="pkg-section on-dark" id="website-packages" style="padding-top:0;">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Website Packages</div>
+        <h2>Website Packages</h2>
+        <p>Custom-built, mobile-friendly websites with hosting and a domain included.</p>
+      </div>
+      <div class="tier-grid" id="websiteGrid"></div>
+    </div>
+  </section>
+
+  <!-- Graphic Design Services -->
+  <section class="pkg-section on-dark" id="graphic-design">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Graphic Design Services</div>
+        <h2>Graphic Design Services</h2>
+        <p>Every design service is priced and ordered individually — order exactly what you need.</p>
+      </div>
+      <div class="tier-grid gd-tier-grid" id="gdGrid"></div>
+    </div>
+  </section>
+
+  <!-- SEO Services -->
+  <section class="pkg-section on-dark" id="seo-services">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="eyebrow">SEO Services</div>
+        <h2>SEO Services</h2>
+        <p>Search optimization plans that scale from a basic audit to a full growth strategy.</p>
+      </div>
+      <div class="tier-grid" id="seoGrid"></div>
+    </div>
+  </section>
+
+  <!-- Portfolio Website Packages -->
+  <section class="pkg-section on-dark" id="portfolio-packages">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Portfolio Website Packages</div>
+        <h2>Portfolio Website Packages</h2>
+        <p>Personal and professional portfolio sites built to get you noticed.</p>
+      </div>
+      <div class="tier-grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= ORDER MODAL ================= -->
+<div class="modal-scrim" id="modalScrim"></div>
+<div class="modal" id="orderModal">
+  <div class="modal-head">
+    <i class="fa-solid fa-xmark close-modal" id="closeModal"></i>
+    <div class="modal-steps">
+      <span class="active" id="stepBar1"></span><span id="stepBar2"></span><span id="stepBar3"></span>
+    </div>
+    <h3 id="modalTitle">Order Details</h3>
+    <div class="sel-line"><span id="modalService">—</span> · <span id="modalPackage">—</span> · <b id="modalPrice">—</b></div>
+  </div>
+  <div class="modal-body">
+
+    <!-- Step 1: Form -->
+    <div class="mstep active" id="mstep1">
+      <div class="form-row2">
+        <div class="form-field2"><label>Full Name <span class="req">*</span></label><input type="text" id="fName" placeholder="Your name"></div>
+        <div class="form-field2"><label>Email <span class="req">*</span></label><input type="email" id="fEmail" placeholder="you@email.com"></div>
+      </div>
+      <div class="form-row2">
+        <div class="form-field2"><label>Phone</label><input type="text" id="fPhone" placeholder="+92 300 0000000"></div>
+        <div class="form-field2"><label>WhatsApp</label><input type="text" id="fWhatsapp" placeholder="+92 300 0000000"></div>
+      </div>
+      <div class="form-field2" style="margin-bottom:14px;">
+        <label>Business Name</label><input type="text" id="fBusiness" placeholder="Optional">
+      </div>
+      <div class="form-row2">
+        <div class="form-field2"><label>Select Service <span class="req">*</span></label>
+          <select id="fService">
+            <option value="">Choose a service</option>
+          </select>
+        </div>
+        <div class="form-field2"><label>Select Type <span class="req">*</span></label>
+          <select id="fType">
+            <option value="">Choose service first</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field2" style="margin-bottom:14px;">
+        <label>Estimated Budget</label>
+        <input type="text" id="fBudget" placeholder="Auto-filled after you pick a type" readonly>
+      </div>
+      <div class="form-field2">
+        <label>Additional Requirements / Message</label>
+        <textarea rows="3" id="fReq" placeholder="Anything specific we should know?"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="mbtn mbtn-primary" style="width:100%" id="toStep2">Order Now</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Summary -->
+    <div class="mstep" id="mstep2">
+      <div class="summary-row"><span>Service</span><span id="sumService">—</span></div>
+      <div class="summary-row"><span>Type</span><span id="sumPackage">—</span></div>
+      <div class="summary-row"><span>Full Name</span><span id="sumName">—</span></div>
+      <div class="summary-row"><span>Email</span><span id="sumEmail">—</span></div>
+      <div class="summary-row"><span>Phone</span><span id="sumPhone">—</span></div>
+      <div class="summary-row"><span>WhatsApp</span><span id="sumWhatsapp">—</span></div>
+      <div class="summary-row"><span>Business Name</span><span id="sumBusiness">—</span></div>
+      <div class="summary-row"><span>Message</span><span id="sumMessage">—</span></div>
+      <div class="summary-total"><span>Budget</span><span id="sumPrice">—</span></div>
+      <div class="modal-actions">
+        <button class="mbtn mbtn-ghost" id="backStep1">Change Order</button>
+        <button class="mbtn mbtn-primary" id="confirmOrder">Confirm Order</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Success -->
+    <div class="mstep" id="mstep3">
+      <div class="success-wrap">
+        <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+        <h3>Thank you! Your order is confirmed</h3>
+        <p>We've received your order and it has been emailed to our team. We will reply to you very soon on the email or WhatsApp number you provided.</p>
+        <button class="mbtn mbtn-primary" style="display:inline-flex;width:auto;padding:13px 26px;" id="closeAfterSuccess">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= DEMO WEBSITES ================= -->
+<section class="demos" id="demos">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Demo Websites</div>
+      <h2>Browse designs across 20 industries</h2>
+      <p>A look at the kind of websites we build. Hover to pause, click any category to preview.</p>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- ================= ABOUT US (STORY) ================= -->
+<section class="about-us">
+  <div class="container au-grid">
+    <div class="au-text reveal">
+      <div class="eyebrow">About Us</div>
+      <h2 style="font-size:clamp(26px,4vw,36px);margin-bottom:18px;">Built by people who'd rather ship than pitch</h2>
+      <p>WEBBAZAAR started with a simple frustration: too many businesses were paying too much for websites that did too little. We set out to build a studio that treats every project — regardless of budget — with the same care as our biggest clients.</p>
+      <p>Today, we're a small, senior team of developers, designers, and marketers who take projects from idea to launch without the usual agency overhead.</p>
+      <p class="au-quote">"We don't just build websites — we build the online presence your business needs to grow."</p>
+    </div>
+    <div class="au-mini-grid reveal">
+      <div class="au-mini-card"><b>500+</b><span>Websites Delivered</span></div>
+      <div class="au-mini-card"><b>8</b><span>Years of Experience</span></div>
+      <div class="au-mini-card"><b>20+</b><span>Industries Served</span></div>
+      <div class="au-mini-card"><b>98%</b><span>Client Satisfaction</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section class="team" id="team">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Team</div>
+      <h2>The people behind your project</h2>
+      <p>A senior, focused team — no account managers relaying messages between you and the people doing the work.</p>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</section>
+
+<!-- ================= GOAL ================= -->
+<section class="goal" id="goal">
+  <div class="container goal-inner reveal">
+    <div class="eyebrow">Our Goal</div>
+    <h2>Every business deserves a professional online presence</h2>
+    <p>We measure our work by one thing: whether it helps your business grow. That means faster websites, clearer branding, and marketing that brings in real customers — not just traffic.</p>
+    <p class="lead">Our goal is to help every business establish a professional online presence, attract more customers, and grow faster through modern digital solutions.</p>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span></span></div>
+      <h2>Frequently asked questions</h2>
+      <p style="margin:0 auto;">Answers to what clients ask us most before getting started.</p>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS ================= -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Customer Reviews</div>
+      <h2>What our clients say</h2>
+      <p>Real feedback from businesses we've helped launch and grow online.</p>
+    </div>
+    <div class="rev-scroll" id="revScroll"></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="eyebrow">Contact</div>
+      <h2 style="font-size:clamp(26px,4vw,36px);margin-bottom:20px;">Let's start your project</h2>
+      <div class="c-info-item">
+        <i class="fa-solid fa-phone"></i>
+        <div><h5>Phone</h5><span>+92 300 1234567</span></div>
+      </div>
+      <div class="c-info-item">
+        <i class="fa-brands fa-whatsapp"></i>
+        <div><h5>WhatsApp</h5><span>+92 300 1234567</span></div>
+      </div>
+      <div class="c-info-item">
+        <i class="fa-solid fa-envelope"></i>
+        <div><h5>Email</h5><span>hello@webbazaar.com</span></div>
+      </div>
+      <div class="c-info-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <div><h5>Office Address</h5><span>Gulberg III, Lahore, Pakistan</span></div>
+      </div>
+      <div class="c-info-item">
+        <i class="fa-solid fa-clock"></i>
+        <div><h5>Working Hours</h5><span>Mon – Sat, 10:00 AM – 7:00 PM</span></div>
+      </div>
+      <div class="map-embed">
+        <iframe src="https://www.google.com/maps?q=Gulberg%20III%2C%20Lahore%2C%20Pakistan&output=embed" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <h3 style="font-size:20px;margin-bottom:10px;">Start your order</h3>
+      <p style="color:var(--slate-dark);font-size:14.5px;margin-bottom:24px;">Pick a service, a type, and see your budget instantly — review everything before you confirm, and it's emailed straight to our team.</p>
+      <ul class="ac-list" style="margin-bottom:28px;">
+        <li><i class="fa-solid fa-check"></i>All services in one form</li>
+        <li><i class="fa-solid fa-check"></i>Budget shown instantly</li>
+        <li><i class="fa-solid fa-check"></i>Review before you confirm</li>
+        <li><i class="fa-solid fa-check"></i>Sent straight to our inbox</li>
+      </ul>
+      <button class="btn btn-primary btn-block" id="openOrderBtn">Start Your Order <i class="fa-solid fa-arrow-right"></i></button>
+      <p class="form-note">This opens our order form — no email app needed, it's sent directly to our team via email.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo"><span class="logo-mark">W</span>WEBBAZAAR</a>
+        <p>Websites, branding, SEO, and digital marketing — built to help your business grow online.</p>
+        <div class="social-row">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#packages">Packages</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Website Development</a></li>
+          <li><a href="#services">Graphic Design</a></li>
+          <li><a href="#services">SEO</a></li>
+          <li><a href="#services">Digital Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Newsletter</h5>
+        <p style="font-size:13.5px;margin-bottom:6px;">Get growth tips in your inbox, monthly.</p>
+        <div class="newsletter">
+          <input type="email" placeholder="Your email">
+          <button>Join</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 WEBBAZAAR. All rights reserved.</span>
+      <div class="legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/923001234567" class="float-wa" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="to-top" id="toTop"><i class="fa-solid fa-arrow-up"></i></div>
+
+<script>
+/* ---------- DATA ---------- */
+const services = [
+  ["fa-solid fa-globe","Website Development","Fast, modern, mobile-friendly websites built to convert."],
+  ["fa-solid fa-palette","Graphic Designing","Logos, banners, and visuals that match your brand."],
+  ["fa-solid fa-magnifying-glass-chart","Search Engine Optimization","On-page and technical SEO to rank higher on Google."],
+  ["fa-solid fa-bullhorn","Digital Marketing","Social media and paid campaigns that reach the right people."],
+  ["fa-solid fa-award","Branding","A consistent identity across every customer touchpoint."],
+  ["fa-solid fa-chart-line","Brand Growth Strategies","Data-backed plans to scale your business online."],
+  ["fa-solid fa-briefcase","Portfolio Websites","Showcase your work with a site that gets you hired."],
+  ["fa-solid fa-file-lines","Landing Pages","High-converting pages built for a single campaign goal."],
+  ["fa-brands fa-wordpress","WordPress Websites","Flexible, easy-to-manage sites built on WordPress."],
+  ["fa-solid fa-cart-shopping","E-Commerce Websites","Online stores built to sell, from checkout to delivery."],
+  ["fa-solid fa-building","Business Websites","Professional sites that establish instant credibility."],
+  ["fa-solid fa-id-card","Company Profile Websites","A polished digital presence for corporate clients."],
+  ["fa-solid fa-pen-ruler","UI/UX Design","Interfaces designed around how people actually use them."],
+  ["fa-solid fa-screwdriver-wrench","Website Maintenance","Ongoing updates, backups, and support after launch."]
+];
+
+const websitePkgs = [
+  {name:"Starter",price:"PKR 3,500",sub:"For a fast, professional first website.",feats:["1–3 Web Pages","Custom Design (Included)","Completion Time: 1–2 Days","Creative Concept: Yes","1 Revision","Custom Graphics","Contact / Feedback Form","SEO (7 Days)","Free Consultation","Free Custom Domain (1 Year)","Free Lifetime GitHub Hosting"]},
+  {name:"Professional",price:"PKR 6,500",sub:"For growing businesses that need more pages.",featured:true,feats:["1–7 Web Pages","Custom Design","Completion Time: 1–3 Days","Creative Concept","2 Revisions","Custom Graphics","Contact Form","SEO (1 Month)","Free Consultation","Free Custom Domain (1 Year)","Free Lifetime GitHub Hosting"]},
+  {name:"Business",price:"PKR 11,000",sub:"For larger sites with long-term SEO support.",feats:["1–20 Web Pages","Custom Design","Completion Time: 1–4 Days","Creative Concept","1 Revision","Custom Graphics","Contact Form","SEO (1 Year)","Free Consultation","Free Custom Domain (1 Year)","Free Lifetime GitHub Hosting"]}
+];
+
+const seoPkgs = [
+  {name:"Basic SEO",price:"PKR 5,000",sub:"A solid on-page SEO foundation.",feats:["Website SEO Audit","Keyword Research (10)","On-Page SEO","Meta Title Optimization","Image Alt Tags","URL Optimization","Internal Linking","Google Search Console","Google Analytics","SEO Report","Free Consultation"]},
+  {name:"Standard SEO",price:"PKR 10,000",sub:"Everything in Basic, plus technical SEO.",featured:true,feats:["Everything in Basic, plus:","Keyword Research (30)","Advanced On-Page SEO","Technical SEO Audit","Website Speed Optimization","Mobile SEO","Schema Markup","Broken Links Fix","Canonical URLs","Local SEO","Google Business Profile","Competitor Analysis","Basic Backlinks","Content Optimization","Performance Report"]},
+  {name:"Premium SEO",price:"PKR 20,000",sub:"Everything in Standard, plus full strategy.",feats:["Everything in Standard, plus:","Keyword Research (100+)","Complete Technical SEO","Advanced Content Strategy","Blog SEO","High-Quality Backlinks","Advanced Competitor Analysis","Local + National SEO","Ecommerce SEO","Core Web Vitals","Advanced Schema","Landing Page SEO","Conversion Optimization","Monthly SEO Strategy","Priority Support"]}
+];
+
+const portfolioPkgs = [
+  {name:"Basic Portfolio",price:"PKR 2,000",sub:"A clean personal portfolio, live fast.",feats:["1–3 Pages","Custom Portfolio Design","Mobile Friendly & Responsive","About, Skills, Projects","Contact Form","Social Media Integration","Gallery","SEO Ready","Basic Animations","Speed Optimization","2 Revisions","Delivery: 1–3 Days"]},
+  {name:"Professional Portfolio",price:"PKR 3,500",sub:"More pages, a blog, and your own domain.",featured:true,feats:["1–6 Pages","Premium Custom Design","Mobile Friendly & Responsive","About, Skills, Projects","Contact Form","Social Media Integration","Gallery","SEO Ready","Smooth Animations","Speed Optimization","5 Revisions","Delivery: 1–5 Days","Free Custom Domain","Blog Section"]},
+  {name:"Premium Portfolio",price:"PKR 7,000",sub:"A full CMS-powered portfolio with support.",feats:["1–10 Pages","Premium UI/UX Design","Mobile Friendly & Responsive","About, Skills, Projects","Contact Form","Social Media Integration","Advanced Gallery","Premium Animations","Advanced SEO Setup","Advanced Speed Optimization","Unlimited Revisions","Free Consultation","Delivery: 1–7 Days","Free Domain + Hosting","Blog + CMS, Admin Panel","Analytics & Search Console Setup","30 Days Free Support"]}
+];
+
+const gdServices = [
+  ["Social Media Posts (5 Posts)","PKR 300","On-brand posts sized for every platform.",["5 Designed Posts","High-Resolution Files","1 Free Revision"]],
+  ["Logo Design","PKR 200","A distinct mark that fits your brand.",["2 Initial Concepts","Source Files Included","1 Free Revision"]],
+  ["Business Card Design","PKR 150","Print-ready, front and back.",["Front & Back Design","Print-Ready Files","1 Free Revision"]],
+  ["Flyer / Poster Design","PKR 600","Eye-catching layouts for promotions.",["Custom Layout","Print & Digital Files","2 Free Revisions"]],
+  ["YouTube Thumbnail","PKR 150","High-CTR thumbnails, per video.",["1 Thumbnail Design","High-Resolution Files","Fast 24h Delivery"]],
+  ["Banner Design","PKR 250","Web or print banners, any size.",["Any Size or Platform","Source Files Included","1 Free Revision"]],
+  ["Letterhead Design","PKR 300","A professional look for official docs.",["Print-Ready Design","Editable Source File","1 Free Revision"]],
+  ["CV / Resume Design","PKR 300","A resume that stands out from the pile.",["1-2 Page Layout","PDF & Editable File","1 Free Revision"]],
+  ["Flyer Design","PKR 250","Single-page promotional flyer.",["Single-Page Design","Print-Ready File","1 Free Revision"]],
+  ["Brochure Design (Bi-Fold / Tri-Fold)","PKR 250","Folded brochures, print-ready.",["Bi-Fold or Tri-Fold","Print-Ready File","1 Free Revision"]],
+  ["Facebook & Instagram Cover Design","PKR 150","Cover art sized for both platforms.",["Sized for Both Platforms","High-Resolution Files","1 Free Revision"]],
+  ["Packaging Label Design","PKR 150","Labels that hold up on the shelf.",["Print-Ready Design","Editable Source File","1 Free Revision"]],
+  ["Menu Design","PKR 300","Restaurant and cafe menu layouts.",["Custom Layout","Print-Ready File","1 Free Revision"]],
+  ["Certificate Design","PKR 150","Certificates for events or courses.",["Custom Template","Editable Source File","1 Free Revision"]],
+  ["Invitation Card Design","PKR 150","Invitations for any occasion.",["Custom Design","Print-Ready File","1 Free Revision"]],
+  ["Brand Style Guide","PKR 800","Colors, type, and logo usage rules.",["Color & Type System","Logo Usage Rules","PDF Guide"]],
+  ["Envelope Design","PKR 150","Branded envelopes, print-ready.",["Print-Ready Design","Editable Source File","1 Free Revision"]],
+  ["Company Profile Design","PKR 1,500","A polished multi-page company profile.",["Multi-Page Layout","Print & Digital Files","2 Free Revisions"]],
+  ["Presentation Design (PowerPoint or Other)","PKR 1,500","Decks that present your business well.",["Custom Slide Design","Editable Source File","2 Free Revisions"]],
+  ["Catalog Design","PKR 400","Product catalogs, laid out cleanly.",["Multi-Page Layout","Print-Ready File","1 Free Revision"]],
+  ["Product Mockups","PKR 300","Realistic mockups for your product.",["3 Mockup Scenes","High-Resolution Files","1 Free Revision"]]
+];
+
+/* ---------- ORDER FORM SERVICE CATALOG ----------
+   Maps every service to its selectable "types" and matching budgets.
+   Add/edit entries here any time you change pricing. */
+const serviceCatalog = {
+  "Website Development": websitePkgs.map(p=>({type:p.name, price:p.price})),
+  "Graphic Designing": gdServices.map(([name,price])=>({type:name, price})),
+  "Search Engine Optimization": seoPkgs.map(p=>({type:p.name, price:p.price})),
+  "Portfolio Websites": portfolioPkgs.map(p=>({type:p.name, price:p.price})),
+  "Digital Marketing":[
+    {type:"Basic Marketing",price:"PKR 4,000"},
+    {type:"Standard Marketing",price:"PKR 8,000"},
+    {type:"Premium Marketing",price:"PKR 15,000"}
+  ],
+  "Branding":[
+    {type:"Basic Branding",price:"PKR 2,500"},
+    {type:"Standard Branding",price:"PKR 5,000"},
+    {type:"Premium Branding",price:"PKR 9,000"}
+  ],
+  "Brand Growth Strategies":[
+    {type:"Basic Strategy",price:"PKR 5,000"},
+    {type:"Standard Strategy",price:"PKR 10,000"},
+    {type:"Premium Strategy",price:"PKR 18,000"}
+  ],
+  "Landing Pages":[
+    {type:"Basic Landing Page",price:"PKR 2,000"},
+    {type:"Standard Landing Page",price:"PKR 3,500"},
+    {type:"Premium Landing Page",price:"PKR 5,500"}
+  ],
+  "WordPress Websites":[
+    {type:"Basic WordPress Site",price:"PKR 4,000"},
+    {type:"Standard WordPress Site",price:"PKR 7,000"},
+    {type:"Premium WordPress Site",price:"PKR 12,000"}
+  ],
+  "E-Commerce Websites":[
+    {type:"Basic Online Store",price:"PKR 8,000"},
+    {type:"Standard Online Store",price:"PKR 15,000"},
+    {type:"Premium Online Store",price:"PKR 25,000"}
+  ],
+  "Business Websites":[
+    {type:"Basic Business Site",price:"PKR 3,000"},
+    {type:"Standard Business Site",price:"PKR 6,000"},
+    {type:"Premium Business Site",price:"PKR 10,000"}
+  ],
+  "Company Profile Websites":[
+    {type:"Basic Company Profile",price:"PKR 3,500"},
+    {type:"Standard Company Profile",price:"PKR 6,500"},
+    {type:"Premium Company Profile",price:"PKR 11,000"}
+  ],
+  "UI/UX Design":[
+    {type:"Basic UI/UX",price:"PKR 3,000"},
+    {type:"Standard UI/UX",price:"PKR 6,000"},
+    {type:"Premium UI/UX",price:"PKR 10,000"}
+  ],
+  "Website Maintenance":[
+    {type:"Basic Maintenance (Monthly)",price:"PKR 1,500"},
+    {type:"Standard Maintenance (Monthly)",price:"PKR 3,000"},
+    {type:"Premium Maintenance (Monthly)",price:"PKR 5,000"}
+  ]
+};
+/* Old service names used by the "Select Package" buttons, mapped to the catalog keys above */
+const serviceAliasMap = {
+  "Website Package":"Website Development",
+  "Graphic Design":"Graphic Designing",
+  "SEO Service":"Search Engine Optimization",
+  "Portfolio Website":"Portfolio Websites"
+};
+const serviceOrder = ["Website Development","Graphic Designing","Search Engine Optimization","Digital Marketing","Branding","Brand Growth Strategies","Portfolio Websites","Landing Pages","WordPress Websites","E-Commerce Websites","Business Websites","Company Profile Websites","UI/UX Design","Website Maintenance"];
+
+const demoCats = [
+  ["Beauty","#ff6fa5","fa-spa"],["Dental","#4FD1FF","fa-tooth"],["Restaurant","#ff9f4f","fa-utensils"],
+  ["Shopping","#2E5EFF","fa-bag-shopping"],["Real Estate","#5B8CFF","fa-house"],["Portfolio","#7C5CFF","fa-images"],
+  ["Education","#4FA8FF","fa-graduation-cap"],["Hospital","#FF5C5C","fa-house-medical"],["Travel","#00C2A8","fa-plane"],
+  ["Agency","#2E5EFF","fa-rocket"],["Business","#3D5AFE","fa-briefcase"],["Fashion","#FF6FA5","fa-shirt"],
+  ["Jewelry","#C9A24B","fa-gem"],["Furniture","#B08968","fa-couch"],["Law Firm","#4A5568","fa-scale-balanced"],
+  ["Construction","#F5A623","fa-hard-hat"],["Blog","#4FD1FF","fa-pen"],["Landing Page","#2E5EFF","fa-bolt"],
+  ["Technology","#4FD1FF","fa-microchip"],["Photography","#7C5CFF","fa-camera"]
+];
+
+const team = [
+  ["Ahmed Raza","CEO"],["Sara Khan","Project Manager"],["Bilal Ahmed","Website Developer"],
+  ["Ayesha Malik","Frontend Developer"],["Hassan Ali","Backend Developer"],["Fatima Noor","WordPress Expert"],
+  ["Usman Tariq","Graphic Designer"],["Zainab Aslam","UI/UX Designer"],["Hamza Sheikh","SEO Specialist"],
+  ["Mahnoor Iqbal","Digital Marketing Expert"],["Danish Farooq","Brand Strategist"],["Rabia Yousaf","Customer Support"]
+];
+
+const reviews = [
+  ["Imran S.","Pakistan","Our new site paid for itself in the first month. Booking requests doubled almost immediately."],
+  ["Sarah Lee","United States","Communication was clear the entire way through and the final site looked far better than what we asked for."],
+  ["Ali Hassan","UAE","SEO package moved us to page one for three of our main keywords within two months."],
+  ["Fatima N.","Pakistan","The team understood our salon brand instantly. Design felt custom, not templated."],
+  ["David Cole","United Kingdom","Fast turnaround, fair pricing, and they actually answered the phone when I called."],
+  ["Aisha Rahman","Canada","Our e-commerce store runs smoother than the one we paid triple for elsewhere."],
+  ["Omar Farouk","Saudi Arabia","Branding package gave us a logo and identity we're genuinely proud to put on invoices."],
+  ["Emily Zhang","Australia","Landing page conversion rate jumped from 1.2% to 4.6% after the redesign."],
+  ["Bilal Q.","Pakistan","Maintenance plan means I never think about the website anymore. It just works."]
+];
+
+const faqs = [
+  ["How long does it take to build a website?","Most projects launch in 3–10 days depending on the package and how quickly we receive your content and feedback."],
+  ["Do I need to provide content and images?","We can work with content you provide, or write and source visuals for you as part of Professional and Business packages."],
+  ["Can I upgrade my package later?","Yes, you can move up to a higher package at any time — you'll only pay the price difference."],
+  ["Do you offer ongoing support after launch?","All website packages include free lifetime GitHub hosting, and Professional and Business packages include free consultation."],
+  ["Can you guarantee a #1 Google ranking?","No agency can honestly guarantee a #1 ranking. We follow SEO best practices to improve visibility and traffic over time."]
+];
+
+/* ---------- RENDER ---------- */
+const svcGrid = document.getElementById('svcGrid');
+services.forEach(([icon,title,desc])=>{
+  svcGrid.insertAdjacentHTML('beforeend', `
+    <div class="svc-card reveal">
+      <div class="svc-icon"><i class="${icon}"></i></div>
+      <h4>${title}</h4><p>${desc}</p>
+    </div>`);
+});
+
+function renderTiers(containerId, service, list){
+  const el = document.getElementById(containerId);
+  el.innerHTML = list.map(p=>`
+    <div class="tier-card ${p.featured?'featured':''} reveal">
+      ${p.featured?'<div class="tier-badge">Most Popular</div>':''}
+      <div class="tier-name">${p.name}</div>
+      <div class="tier-price">${p.price}</div>
+      <div class="tier-sub">${p.sub}</div>
+      <ul class="tier-feats">${p.feats.map(f=>`<li><i class="fa-solid fa-check"></i>${f}</li>`).join('')}</ul>
+      <button class="btn-select" onclick="openOrder('${service}','${p.name}','${p.price}')">Select Package</button>
+    </div>`).join('');
+}
+renderTiers('websiteGrid','Website Package',websitePkgs);
+renderTiers('seoGrid','SEO Service',seoPkgs);
+renderTiers('portfolioGrid','Portfolio Website',portfolioPkgs);
+
+const gdGrid = document.getElementById('gdGrid');
+gdGrid.innerHTML = gdServices.map(([name,price,sub,feats])=>`
+  <div class="tier-card reveal">
+    <div class="tier-name">${name}</div>
+    <div class="tier-price">${price}</div>
+    <div class="tier-sub">${sub}</div>
+    <ul class="tier-feats">${feats.map(f=>`<li><i class="fa-solid fa-check"></i>${f}</li>`).join('')}</ul>
+    <button class="btn-select" onclick="openOrder('Graphic Design','${name.replace(/'/g,"\\'")}','${price}')">Select Package</button>
+  </div>`).join('');
+
+/* ---------- EMAILJS SETUP ----------
+   1) Sign up free at https://www.emailjs.com
+   2) Add an Email Service (e.g. Gmail) -> copy its "Service ID"
+   3) Create an Email Template -> copy its "Template ID"
+      Use these variable names in your template: {{customer_name}}, {{customer_email}},
+      {{customer_phone}}, {{customer_whatsapp}}, {{business_name}}, {{service}},
+      {{package_type}}, {{budget}}, {{message}}, {{order_date}}, {{to_email}}
+   4) Account -> "API Keys" -> copy your "Public Key"
+   5) Paste all 3 values below where marked YOUR_..._HERE                        */
+(function(){
+  emailjs.init('YOUR_PUBLIC_KEY_HERE');
+})();
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID_HERE';
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID_HERE';
+
+/* ---------- ORDER MODAL LOGIC ---------- */
+let currentOrder = {service:'',pkg:'',price:''};
+const modalScrim = document.getElementById('modalScrim');
+const orderModal = document.getElementById('orderModal');
+const fServiceSel = document.getElementById('fService');
+const fTypeSel = document.getElementById('fType');
+const fBudgetInput = document.getElementById('fBudget');
+
+/* populate the Select Service dropdown once */
+fServiceSel.innerHTML = '<option value="">Choose a service</option>' +
+  serviceOrder.map(s=>`<option value="${s}">${s}</option>`).join('');
+
+function updateTypeOptions(serviceName, preselectType){
+  const catalog = serviceCatalog[serviceName];
+  if(!catalog){
+    fTypeSel.innerHTML = '<option value="">Choose service first</option>';
+    fBudgetInput.value = '';
+    document.getElementById('modalService').textContent = serviceName || '—';
+    document.getElementById('modalPackage').textContent = '—';
+    document.getElementById('modalPrice').textContent = '—';
+    return;
+  }
+  fTypeSel.innerHTML = '<option value="">Choose a type</option>' +
+    catalog.map(c=>`<option value="${c.type.replace(/"/g,'&quot;')}">${c.type} — ${c.price}</option>`).join('');
+  if(preselectType){ fTypeSel.value = preselectType; }
+  updateBudget(serviceName);
+}
+
+function updateBudget(serviceName){
+  const catalog = serviceCatalog[serviceName] || [];
+  const match = catalog.find(c=>c.type===fTypeSel.value);
+  fBudgetInput.value = match ? match.price : '';
+  document.getElementById('modalService').textContent = serviceName || '—';
+  document.getElementById('modalPackage').textContent = fTypeSel.value || '—';
+  document.getElementById('modalPrice').textContent = match ? match.price : '—';
+}
+
+fServiceSel.addEventListener('change', (e)=> updateTypeOptions(e.target.value, ''));
+fTypeSel.addEventListener('change', ()=> updateBudget(fServiceSel.value));
+
+function openOrder(service,pkg,price){
+  const normService = serviceAliasMap[service] || service;
+  fServiceSel.value = normService || '';
+  updateTypeOptions(normService, pkg);
+  goToStep(1);
+  modalScrim.classList.add('show');
+  orderModal.classList.add('show');
+}
+function openBlankOrder(){
+  document.getElementById('fName').value = '';
+  document.getElementById('fEmail').value = '';
+  document.getElementById('fPhone').value = '';
+  document.getElementById('fWhatsapp').value = '';
+  document.getElementById('fBusiness').value = '';
+  document.getElementById('fReq').value = '';
+  fServiceSel.value = '';
+  updateTypeOptions('', '');
+  goToStep(1);
+  modalScrim.classList.add('show');
+  orderModal.classList.add('show');
+}
+document.getElementById('openOrderBtn').addEventListener('click', openBlankOrder);
+
+function closeOrder(){
+  modalScrim.classList.remove('show');
+  orderModal.classList.remove('show');
+}
+document.getElementById('closeModal').addEventListener('click', closeOrder);
+document.getElementById('closeAfterSuccess').addEventListener('click', closeOrder);
+modalScrim.addEventListener('click', closeOrder);
+
+function goToStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('mstep'+i).classList.toggle('active', i===n);
+    document.getElementById('stepBar'+i).classList.toggle('active', i<=n);
+  });
+  document.getElementById('modalTitle').textContent =
+    n===1 ? 'Order Details' : n===2 ? 'Review Your Order' : 'Order Confirmed';
+}
+
+document.getElementById('toStep2').addEventListener('click', ()=>{
+  const name = document.getElementById('fName').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const service = fServiceSel.value;
+  const type = fTypeSel.value;
+  const budget = fBudgetInput.value;
+  if(!name || !email){ alert('Please add your name and email to continue.'); return; }
+  if(!service || !type){ alert('Please select a service and a type.'); return; }
+  currentOrder = {service, pkg:type, price:budget};
+  document.getElementById('sumService').textContent = service;
+  document.getElementById('sumPackage').textContent = type;
+  document.getElementById('sumName').textContent = name;
+  document.getElementById('sumEmail').textContent = email;
+  document.getElementById('sumPhone').textContent = document.getElementById('fPhone').value.trim() || '—';
+  document.getElementById('sumWhatsapp').textContent = document.getElementById('fWhatsapp').value.trim() || '—';
+  document.getElementById('sumBusiness').textContent = document.getElementById('fBusiness').value.trim() || '—';
+  document.getElementById('sumMessage').textContent = document.getElementById('fReq').value.trim() || '—';
+  document.getElementById('sumPrice').textContent = budget;
+  goToStep(2);
+});
+
+document.getElementById('backStep1').addEventListener('click', ()=>goToStep(1));
+
+document.getElementById('confirmOrder').addEventListener('click', ()=>{
+  const btn = document.getElementById('confirmOrder');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const templateParams = {
+    to_email: 'hello@webbazaar.com',
+    service: currentOrder.service,
+    package_type: currentOrder.pkg,
+    budget: currentOrder.price,
+    customer_name: document.getElementById('fName').value.trim(),
+    customer_email: document.getElementById('fEmail').value.trim(),
+    customer_phone: document.getElementById('fPhone').value.trim(),
+    customer_whatsapp: document.getElementById('fWhatsapp').value.trim(),
+    business_name: document.getElementById('fBusiness').value.trim(),
+    message: document.getElementById('fReq').value.trim(),
+    order_date: new Date().toLocaleString()
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+    .then(()=>{
+      goToStep(3);
+      btn.textContent = 'Confirm Order';
+      btn.disabled = false;
+    })
+    .catch((err)=>{
+      console.error('EmailJS error:', err);
+      alert('Order could not be sent automatically. Please WhatsApp us your order, or try again in a moment.');
+      btn.textContent = 'Confirm Order';
+      btn.disabled = false;
+    });
+});
+
+const track = document.getElementById('marqueeTrack');
+const demoHtml = demoCats.map(([name,color,icon])=>`
+  <div class="demo-card">
+    <div class="demo-thumb" style="background:linear-gradient(135deg,${color},#0A0E1A)"><i class="fa-solid ${icon}"></i></div>
+    <h5>${name}</h5>
+    <a href="#demos">View Demo <i class="fa-solid fa-arrow-right"></i></a>
+  </div>`).join('');
+track.innerHTML = demoHtml + demoHtml;
+
+const teamGrid = document.getElementById('teamGrid');
+const teamColors = ['#2E5EFF','#4FD1FF','#7C5CFF','#FF6FA5','#F5A623','#00C2A8'];
+team.forEach(([name,role],i)=>{
+  const initials = name.split(' ').map(w=>w[0]).join('');
+  teamGrid.insertAdjacentHTML('beforeend', `
+    <div class="team-card reveal">
+      <div class="avatar" style="background:linear-gradient(135deg,${teamColors[i%teamColors.length]},#0A0E1A)">${initials}</div>
+      <h4>${name}</h4><span>${role}</span>
+    </div>`);
+});
+
+const revScroll = document.getElementById('revScroll');
+reviews.forEach(([name,country,text],i)=>{
+  const initials = name.split(' ').map(w=>w[0]).join('');
+  revScroll.insertAdjacentHTML('beforeend', `
+    <div class="rev-card">
+      <div class="rev-top">
+        <div class="avatar" style="background:linear-gradient(135deg,${teamColors[i%teamColors.length]},#0A0E1A)">${initials}</div>
+        <div><div class="rev-name">${name}</div><div class="rev-country">${country}</div></div>
+      </div>
+      <div class="rev-stars">★★★★★</div>
+      <p>${text}</p>
+    </div>`);
+});
+
+const faqList = document.getElementById('faqList');
+faqs.forEach(([q,a])=>{
+  faqList.insertAdjacentHTML('beforeend', `
+    <div class="faq-item">
+      <div class="faq-q"><span>${q}</span><i class="fa-solid fa-plus"></i></div>
+      <div class="faq-a"><p>${a}</p></div>
+    </div>`);
+});
+
+/* ---------- INTERACTIONS ---------- */
+// header scroll state
+const header = document.getElementById('siteHeader');
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', ()=>{
+  header.classList.toggle('scrolled', window.scrollY > 40);
+  toTop.classList.toggle('show', window.scrollY > 600);
+});
+toTop.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// mobile nav
+const burger = document.getElementById('burgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+const mobileClose = document.getElementById('mobileClose');
+const navScrim = document.getElementById('navScrim');
+function openNav(){mobileNav.classList.add('open');navScrim.classList.add('show');}
+function closeNav(){mobileNav.classList.remove('open');navScrim.classList.remove('show');}
+burger.addEventListener('click', openNav);
+mobileClose.addEventListener('click', closeNav);
+navScrim.addEventListener('click', closeNav);
+mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeNav));
+
+// faq accordion
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight=null;});
+    if(!isOpen){ item.classList.add('open'); a.style.maxHeight = a.scrollHeight+'px'; }
+  });
+});
+
+// reveal on scroll
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
